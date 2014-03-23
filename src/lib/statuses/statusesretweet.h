@@ -45,7 +45,7 @@ signals:
 //    void include_entitiesChanged(bool include_entities);
 
 protected:
-    QUrl api() const { return QUrl(QString("https://api.twitter.com/1.1/statuses/retweet/%1.json").arg(id())); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/statuses/retweet/%1.json").arg(id())); }
 };
 
 #endif // STATUSESRETWEET_H

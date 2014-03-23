@@ -44,7 +44,7 @@ AbstractTwitterModel::AuthorizeBy AbstractIdsModel::authenticationMethod() const
 
 QString AbstractIdsModel::httpMethod() const
 {
-    return "GET";
+    return QStringLiteral("GET");
 }
 
 void AbstractIdsModel::parseDone(const QVariant &result)
@@ -54,13 +54,13 @@ void AbstractIdsModel::parseDone(const QVariant &result)
         foreach (const QVariant &result, array) {
             if (result.type() == QVariant::Int) {
                 QVariantMap map;
-                map.insert("id", result.toInt());
-                map.insert("id_str", result.toString());
+                map.insert(QStringLiteral("id"), result.toInt());
+                map.insert(QStringLiteral("id_str"), result.toString());
                 addData(map);
             } else if (result.type() == QVariant::String) {
                 QVariantMap map;
-                map.insert("id", result.toInt());
-                map.insert("id_str", result.toString());
+                map.insert(QStringLiteral("id"), result.toInt());
+                map.insert(QStringLiteral("id_str"), result.toString());
                 addData(map);
             } else {
                 DEBUG() << result.type() << result;

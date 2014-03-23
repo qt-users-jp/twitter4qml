@@ -51,9 +51,9 @@ signals:
     void relationshipChanged(const QVariantMap &relationship);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/friendships/show.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/friendships/show.json")); }
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    QString httpMethod() const { return "GET"; }
+    QString httpMethod() const { return QStringLiteral("GET"); }
 
 private:
     class Private;

@@ -51,8 +51,8 @@ public:
 
 protected:
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/saved_searches/list.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/saved_searches/list.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
     void parseDone(const QVariant &result);
 
     void dataAdded(const QString &key, const QVariantMap &value);

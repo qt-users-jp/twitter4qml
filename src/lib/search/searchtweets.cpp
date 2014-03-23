@@ -32,7 +32,7 @@
 
 SearchTweets::SearchTweets(QObject *parent)
     : AbstractStatusesModel(parent)
-    , m_result_type("mixed")
+    , m_result_type(QStringLiteral("mixed"))
 {
 }
 
@@ -40,12 +40,12 @@ void SearchTweets::parseDone(const QVariant &result)
 {
     if (result.type() == QVariant::Map) {
         QVariantMap object = result.toMap();
-        if (object.contains("search_metadata"))
-            search_metadata(object.value("search_metadata").toMap());
+        if (object.contains(QStringLiteral("search_metadata")))
+            search_metadata(object.value(QStringLiteral("search_metadata")).toMap());
 //        if (object.contains("query"))
 //            setQ(object.value("query").toString());
-        if (object.contains("statuses") && object.value("statuses").type() == QVariant::List) {
-            QVariantList results = object.value("statuses").toList();
+        if (object.contains(QStringLiteral("statuses")) && object.value(QStringLiteral("statuses")).type() == QVariant::List) {
+            QVariantList results = object.value(QStringLiteral("statuses")).toList();
             if (results.isEmpty()) {
                 emit loadingChanged(false);
             } else {
@@ -64,7 +64,7 @@ void SearchTweets::parseDone(const QVariant &result)
 void SearchTweets::dataAdded(const QString &key, const QVariantMap &value)
 {
     Q_UNUSED(key)
-    if (value.value("text").toString().contains(QString(QByteArray::fromPercentEncoding(q().toUtf8())), Qt::CaseInsensitive)) {
+    if (value.value(QStringLiteral("text")).toString().contains(QString::fromUtf8(QByteArray::fromPercentEncoding(q().toUtf8())), Qt::CaseInsensitive)) {
         addData(value);
     }
 }

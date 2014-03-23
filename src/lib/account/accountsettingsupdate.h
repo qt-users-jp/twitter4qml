@@ -51,7 +51,7 @@ signals:
     void langChanged(const QString &lang);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/account/settings.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/account/settings.json")); }
 
 private:
     ADD_PROPERTY(int, trend_location_woeid, int)

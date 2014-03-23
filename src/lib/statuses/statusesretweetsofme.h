@@ -51,7 +51,7 @@ signals:
     void include_user_entitiesChanged(bool include_user_entities);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/statuses/retweets_of_me.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/statuses/retweets_of_me.json")); }
 
     ADD_PROPERTY(bool, include_user_entities, bool)
 };

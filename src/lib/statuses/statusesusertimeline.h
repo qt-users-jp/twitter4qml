@@ -59,7 +59,7 @@ signals:
     void include_rtsChanged(bool include_rts);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/statuses/user_timeline.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/statuses/user_timeline.json")); }
     void dataAdded(const QString &key, const QVariantMap &value);
 
     ADD_PROPERTY(bool, exclude_replies, bool)

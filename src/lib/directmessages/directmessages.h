@@ -51,7 +51,7 @@ signals:
     void skip_statusChanged(bool skip_status);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/direct_messages.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/direct_messages.json")); }
     void dataAdded(const QString &key, const QVariantMap &value);
 
     ADD_PROPERTY(bool, skip_status, bool)

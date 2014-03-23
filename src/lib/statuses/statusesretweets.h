@@ -45,7 +45,7 @@ signals:
     void trim_userChanged(bool trim_user);
 
 protected:
-    QUrl api() const { return QUrl(QString("https://api.twitter.com/1.1/statuses/retweets/%1.json").arg(id())); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/statuses/retweets/%1.json").arg(id())); }
 };
 
 #endif // StatusesRETWEETS_H

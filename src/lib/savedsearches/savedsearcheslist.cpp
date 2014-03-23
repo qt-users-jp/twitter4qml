@@ -57,7 +57,7 @@ SavedSearchesList::Private::Private(SavedSearchesList *parent)
 void SavedSearchesList::Private::create(const QVariantMap &parameters)
 {
     SavedSearchesCreate *action = new SavedSearchesCreate(this);
-    action->query(parameters.value("query").toString());
+    action->query(parameters.value(QStringLiteral("query")).toString());
     connect(action, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
     if (loading) {
         tasks.append(action);
@@ -70,7 +70,7 @@ void SavedSearchesList::Private::create(const QVariantMap &parameters)
 void SavedSearchesList::Private::destroy(const QVariantMap &parameters)
 {
     SavedSearchesDestroy *action = new SavedSearchesDestroy(this);
-    action->id(parameters.value("id").toString());
+    action->id(parameters.value(QStringLiteral("id")).toString());
     connect(action, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
     if (loading) {
         tasks.append(action);
@@ -85,14 +85,14 @@ void SavedSearchesList::Private::dataChanged(const QVariant &data)
     QVariantMap map = data.toMap();
 //    DEBUG() << data;
     if (qobject_cast<SavedSearchesCreate *>(sender())) {
-        if (map.contains("id_str")) {
-            DataManager::instance()->addData(q->dataType(), map.value("id_str").toString(), map);
+        if (map.contains(QStringLiteral("id_str"))) {
+            DataManager::instance()->addData(q->dataType(), map.value(QStringLiteral("id_str")).toString(), map);
         }
         sender()->deleteLater();
     }
     if (qobject_cast<SavedSearchesDestroy *>(sender())) {
-        if (map.contains("id_str")) {
-            DataManager::instance()->removeData(q->dataType(), map.value("id_str").toString());
+        if (map.contains(QStringLiteral("id_str"))) {
+            DataManager::instance()->removeData(q->dataType(), map.value(QStringLiteral("id_str")).toString());
         }
         sender()->deleteLater();
     }
@@ -157,7 +157,7 @@ void SavedSearchesList::parseDone(const QVariant &result)
         foreach (const QVariant &result, array) {
             if (result.type() == QVariant::Map) {
                 QVariantMap map = result.toMap();
-                map.insert("id_str", map.value("id").toString());
+                map.insert(QStringLiteral("id_str"), map.value(QStringLiteral("id")).toString());
                 addData(map);
             }
         }

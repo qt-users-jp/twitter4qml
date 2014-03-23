@@ -56,7 +56,7 @@ AbstractTwitterModel::AuthorizeBy AbstractListsModel::authenticationMethod() con
 
 QString AbstractListsModel::httpMethod() const
 {
-    return "GET";
+    return QStringLiteral("GET");
 }
 
 void AbstractListsModel::parseDone(const QVariant &result)

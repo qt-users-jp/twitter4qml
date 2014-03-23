@@ -43,8 +43,8 @@ signals:
     void resourcesChanged(const QVariantMap &resources);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/application/rate_limit_status.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/application/rate_limit_status.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
 
 private:
     ADD_PROPERTY(const QVariantMap &, rate_limit_context, QVariantMap)

@@ -51,7 +51,7 @@ signals:
     void include_entitiesChanged(bool include_entities);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/favorites/list.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/favorites/list.json")); }
     void dataAdded(const QString &key, const QVariantMap &value);
     void dataChanged(const QString &key, const QVariantMap &value);
 };

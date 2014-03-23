@@ -49,7 +49,7 @@ signals:
     void include_entitiesChanged(bool include_entities);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/direct_messages/sent.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/direct_messages/sent.json")); }
     void dataAdded(const QString &key, const QVariantMap &value);
 };
 

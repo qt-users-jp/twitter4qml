@@ -43,7 +43,7 @@ signals:
     void cursorChanged(const QString &cursor);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/blocks/ids.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/blocks/ids.json")); }
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
 };
 

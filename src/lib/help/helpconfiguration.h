@@ -53,8 +53,8 @@ signals:
 
 protected:
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    QString httpMethod() const { return "GET"; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/help/configuration.json"); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/help/configuration.json")); }
 
 private:
     ADD_PROPERTY(const QString &, characters_reserved_per_media, QString)

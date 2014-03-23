@@ -39,7 +39,7 @@ void StatusesShow::exec()
     DataManager *manager = DataManager::instance();
     if (manager->contains(DataManager::StatusData, id())) {
         QVariantMap data = manager->getData(DataManager::StatusData, id());
-        if (data.contains("in_reply_to_status_id")) {
+        if (data.contains(QStringLiteral("in_reply_to_status_id"))) {
             setData(data);
             setLoading(false);
         } else {

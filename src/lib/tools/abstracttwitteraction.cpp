@@ -86,38 +86,38 @@ void AbstractTwitterAction::Private::exec()
         bool ok;
         switch (value.type()) {
         case QVariant::Bool:
-            params.insert(key, value.toString().toUtf8());
-            body.append(QString("%1=%2").arg(key).arg(value.toString()));
+            params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+            body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             break;
         case QVariant::String:
             if (!value.toString().isNull()) {
-                params.insert(key, value.toString().toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(value.toString()));
+                params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             }
             break;
         case QVariant::Double:
             if (!qFuzzyCompare(value.toDouble(&ok), 0.0) && ok && !qIsNaN(value.toDouble())) {
                 QString val = QString::number(value.toDouble(), 'f');
-                params.insert(key, val.toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(val));
+                params.insert(QString::fromUtf8(key), val.toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(val));
             }
             break;
         case QVariant::Int:
             if (value.toInt() > 0) {
-                params.insert(key, value.toString().toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(value.toString()));
+                params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             }
             break;
         case QVariant::LongLong:
             if (value.toLongLong() > 0) {
-                params.insert(key, value.toString().toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(value.toString()));
+                params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             }
             break;
         case QVariant::List:
             if (!value.toList().isEmpty()) {
                 foreach (const QVariant &val, value.toList()) {
-                    params.insert(QString("%1[]").arg(key), val.toByteArray());
+                    params.insert(QStringLiteral("%1[]").arg(QString::fromUtf8(key)), val.toByteArray());
                 }
             }
             break;
@@ -175,7 +175,7 @@ void AbstractTwitterAction::Private::error(QNetworkReply::NetworkError error)
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
     DEBUG() << error << reply->errorString() << reply->url();
     QVariantMap data;
-    data.insert("error", reply->errorString());
+    data.insert(QStringLiteral("error"), reply->errorString());
     q->setData(data);
     reply->deleteLater();
     q->setLoading(false);
@@ -204,9 +204,9 @@ void AbstractTwitterAction::setParameters(const QVariantMap &parameters)
         QMetaProperty prop = mo->property(i);
         if (!prop.isUser()) continue;
         const char *key = prop.name();
-        if (parameters.contains(key)) {
-            if (!setProperty(key, parameters.value(key))) {
-                DEBUG() << mo->className() << key << parameters.value(key);
+        if (parameters.contains(QString::fromUtf8(key))) {
+            if (!setProperty(key, parameters.value(QString::fromUtf8(key)))) {
+                DEBUG() << mo->className() << key << parameters.value(QString::fromUtf8(key));
             }
         }
     }

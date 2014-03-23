@@ -51,7 +51,7 @@ signals:
     void include_entitiesChanged(bool include_entities);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/users/search.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/users/search.json")); }
 };
 
 #endif // USERSSEARCH_H

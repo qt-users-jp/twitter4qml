@@ -60,7 +60,7 @@ void AccountVerifyCredentials::Private::dataAdded(DataManager::DataType type, co
 {
     Q_UNUSED(key)
     if (type != DataManager::StatusData) return;
-    if (value.value("user").toMap().value("id_str") == q->id_str()) {
+    if (value.value(QStringLiteral("user")).toMap().value(QStringLiteral("id_str")) == q->id_str()) {
         q->statuses_count(q->statuses_count() + 1);
     }
 }
@@ -69,7 +69,7 @@ void AccountVerifyCredentials::Private::dataAboutToBeRemoved(DataManager::DataTy
 {
     Q_UNUSED(key)
     if (type != DataManager::StatusData) return;
-    if (value.value("user").toMap().value("id_str") == q->id_str()) {
+    if (value.value(QStringLiteral("user")).toMap().value(QStringLiteral("id_str")) == q->id_str()) {
         q->statuses_count(q->statuses_count() - 1);
     }
 }
@@ -113,7 +113,7 @@ QVariantMap AccountVerifyCredentials::data() const
         QMetaProperty prop = mo->property(i);
         if (!prop.isDesignable()) continue;
         const char *key = prop.name();
-        ret.insert(key, property(key));
+        ret.insert(QString::fromUtf8(key), property(key));
     }
     return ret;
 }

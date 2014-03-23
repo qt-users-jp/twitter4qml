@@ -58,8 +58,8 @@ signals:
 protected:
     AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
     bool isStreaming() const { return true; }
-    QUrl api() const { return QUrl("https://stream.twitter.com/1.1/statuses/filter.json"); }
-    QString httpMethod() const { return "POST"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://stream.twitter.com/1.1/statuses/filter.json")); }
+    QString httpMethod() const { return QStringLiteral("POST"); }
     void parseDone(const QVariant &result);
 
 private:

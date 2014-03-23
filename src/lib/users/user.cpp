@@ -241,17 +241,17 @@ void User::Private::dataChanged(const QVariant &data)
                 QMetaProperty prop = mo->property(i);
                 if (!prop.isDesignable()) continue;
                 const char *key = prop.name();
-                if (user.contains(key)) {
-                    if (QLatin1String("following") == key) {
+                if (user.contains(QString::fromUtf8(key))) {
+                    if (QByteArrayLiteral("following") == key) {
                         if (qobject_cast<FriendshipsCreate *>(sender())) {
                             q->setProperty(key, true);
                         } else if (qobject_cast<FriendshipsDestroy *>(sender())) {
                                 q->setProperty(key, false);
                         } else {
-                            q->setProperty(key, user.value(key));
+                            q->setProperty(key, user.value(QString::fromUtf8(key)));
                         }
                     } else {
-                        q->setProperty(key, user.value(key));
+                        q->setProperty(key, user.value(QString::fromUtf8(key)));
                     }
                 } else {
                     q->setProperty(key, QVariant());
@@ -331,7 +331,7 @@ QVariantMap User::data() const
         QMetaProperty prop = mo->property(i);
         if (!prop.isDesignable()) continue;
         const char *key = prop.name();
-        ret.insert(key, property(key));
+        ret.insert(QString::fromUtf8(key), property(key));
     }
     return ret;
 }

@@ -96,7 +96,7 @@ void OAuth::Private::finished()
 
     switch (state) {
     case ObtainUnauthorizedRequestToken:
-        if (reply->url() == QUrl(request_token_url)) {
+        if (reply->url() == QUrl(QString::fromUtf8(request_token_url))) {
             if (OAuthManager::instance().updateToken(reply)) {
                 setState(RequestTokenReceived);
             } else {
@@ -105,7 +105,7 @@ void OAuth::Private::finished()
         }
         break;
     case ExchangeRequestTokenForAccessToken:
-        if (reply->url() == QUrl(access_token_url)) {
+        if (reply->url() == QUrl(QString::fromUtf8(access_token_url))) {
             if (OAuthManager::instance().updateToken(reply)) {
                 setState(Authorized);
             } else {
@@ -209,7 +209,7 @@ void OAuth::request_token(const QString &callback)
     if (!callback.isNull())
         params.insert(QLatin1String("oauth_callback"), callback.toUtf8());
     OAuthManager::instance().setAuthorizeBy(OAuthManager::AuthorizeByHeader);
-    QNetworkReply *reply = OAuthManager::instance().request(QLatin1String("POST"), QUrl(request_token_url), params);
+    QNetworkReply *reply = OAuthManager::instance().request(QStringLiteral("POST"), QUrl(QString::fromUtf8(request_token_url)), params);
     connect(reply, SIGNAL(finished()), d, SLOT(finished()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), d, SLOT(error(QNetworkReply::NetworkError)));
     d->setState(ObtainUnauthorizedRequestToken);
@@ -221,7 +221,7 @@ void OAuth::authorize()
         qWarning() << "state =" << state();
         return;
     }
-    QDesktopServices::openUrl(QUrl(QString(authorize_url).arg(OAuthManager::instance().token())));
+    QDesktopServices::openUrl(QUrl(QString::fromUtf8(authorize_url).arg(OAuthManager::instance().token())));
     d->setState(UserAuthorizesRequestToken);
 }
 
@@ -234,7 +234,7 @@ void OAuth::access_token(const QString &pin)
     QMultiMap<QString, QByteArray> params;
     params.insert(QLatin1String("oauth_verifier"), pin.toUtf8());
     OAuthManager::instance().setAuthorizeBy(OAuthManager::AuthorizeByHeader);
-    QNetworkReply *reply = OAuthManager::instance().request(QLatin1String("POST"), QUrl(access_token_url), params);
+    QNetworkReply *reply = OAuthManager::instance().request(QStringLiteral("POST"), QUrl(QString::fromUtf8(access_token_url)), params);
     connect(reply, SIGNAL(finished()), d, SLOT(finished()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), d, SLOT(error(QNetworkReply::NetworkError)));
     d->setState(ExchangeRequestTokenForAccessToken);

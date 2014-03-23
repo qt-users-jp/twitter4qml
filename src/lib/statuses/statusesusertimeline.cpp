@@ -37,7 +37,7 @@ StatusesUserTimeline::StatusesUserTimeline(QObject *parent)
 void StatusesUserTimeline::dataAdded(const QString &key, const QVariantMap &value)
 {
     Q_UNUSED(key)
-    QString id_str = value.value("user").toMap().value("id_str").toString();
+    QString id_str = value.value(QStringLiteral("user")).toMap().value(QStringLiteral("id_str")).toString();
     if (user_id().isEmpty() && id_str == OAuthManager::instance().user_id()) {
         addData(value);
     } else if (id_str == user_id()) {

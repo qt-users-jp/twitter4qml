@@ -113,25 +113,25 @@ void Status::Private::id_strChanged(const QString &id)
 void Status::Private::update(const QVariantMap &parameters)
 {
     AbstractTwitterAction *action = 0;
-    if (parameters.contains("media") && !parameters.value("media").toList().isEmpty()) {
+    if (parameters.contains(QStringLiteral("media")) && !parameters.value(QStringLiteral("media")).toList().isEmpty()) {
         StatusesUpdateWithMedia *act = new StatusesUpdateWithMedia(this);
-        act->status(parameters.value("status").toString());
-        act->latitude(parameters.value("_lat").toDouble());
-        act->longitude(parameters.value("_long").toDouble());
-        act->place_id(parameters.value("place_id").toString());
-        act->media(parameters.value("media").toList());
-        act->in_reply_to_status_id(parameters.value("in_reply_to_status_id").toString());
+        act->status(parameters.value(QStringLiteral("status")).toString());
+        act->latitude(parameters.value(QStringLiteral("_lat")).toDouble());
+        act->longitude(parameters.value(QStringLiteral("_long")).toDouble());
+        act->place_id(parameters.value(QStringLiteral("place_id")).toString());
+        act->media(parameters.value(QStringLiteral("media")).toList());
+        act->in_reply_to_status_id(parameters.value(QStringLiteral("in_reply_to_status_id")).toString());
         act->trim_user(false);
         act->include_entities(true);
         connect(act, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
         action = act;
     } else {
         StatusesUpdate *act = new StatusesUpdate(this);
-        act->status(parameters.value("status").toString());
-        act->latitude(parameters.value("_lat").toDouble());
-        act->longitude(parameters.value("_long").toDouble());
-        act->place_id(parameters.value("place_id").toString());
-        act->in_reply_to_status_id(parameters.value("in_reply_to_status_id").toString());
+        act->status(parameters.value(QStringLiteral("status")).toString());
+        act->latitude(parameters.value(QStringLiteral("_lat")).toDouble());
+        act->longitude(parameters.value(QStringLiteral("_long")).toDouble());
+        act->place_id(parameters.value(QStringLiteral("place_id")).toString());
+        act->in_reply_to_status_id(parameters.value(QStringLiteral("in_reply_to_status_id")).toString());
         act->trim_user(false);
         act->include_entities(true);
         connect(act, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
@@ -148,7 +148,7 @@ void Status::Private::update(const QVariantMap &parameters)
 void Status::Private::retweet(const QVariantMap &parameters)
 {
     StatusesRetweet *action = new StatusesRetweet(this);
-    action->id(parameters.value("id").toString());
+    action->id(parameters.value(QStringLiteral("id")).toString());
     action->trim_user(true);
     action->include_entities(true);
     connect(action, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
@@ -220,8 +220,8 @@ void Status::Private::dataChanged(const QVariant &data)
             QMetaProperty prop = mo->property(i);
             if (!prop.isDesignable()) continue;
             const char *key = prop.name();
-            if (status.contains(key)) {
-                q->setProperty(key, status.value(key));
+            if (status.contains(QString::fromUtf8(key))) {
+                q->setProperty(key, status.value(QString::fromUtf8(key)));
             } else {
                 q->setProperty(key, QVariant());
             }
@@ -285,14 +285,14 @@ QVariantMap Status::data() const
         QMetaProperty prop = mo->property(i);
         if (!prop.isDesignable()) continue;
         const char *key = prop.name();
-        ret.insert(key, property(key));
+        ret.insert(QString::fromUtf8(key), property(key));
     }
     return ret;
 }
 
 bool Status::indicesGreaterThan(const QVariant &v1, const QVariant &v2)
 {
-    return v1.toMap().value("indices").toList().first().toInt() > v2.toMap().value("indices").toList().first().toInt();
+    return v1.toMap().value(QStringLiteral("indices")).toList().first().toInt() > v2.toMap().value(QStringLiteral("indices")).toList().first().toInt();
 }
 
 void Status::debug() const
@@ -310,76 +310,76 @@ QVariantMap Status::parse(const QVariantMap &status)
 {
     QVariantMap ret = status;
 
-    ret.insert("user", User::parse(ret.value("user").toMap()));
+    ret.insert(QStringLiteral("user"), User::parse(ret.value(QStringLiteral("user")).toMap()));
 
-    QString text = ret.value("text").toString();
-    if (ret.contains("entities") && !ret.value("entities").isNull()) {
+    QString text = ret.value(QStringLiteral("text")).toString();
+    if (ret.contains(QStringLiteral("entities")) && !ret.value(QStringLiteral("entities")).isNull()) {
 //        DEBUG() << text;
         QString plain_text = text;
-        QString rich_text = text.replace(" ", "\t");
+        QString rich_text = text.replace(QStringLiteral(" "), QStringLiteral("\t"));
         QVariantList entitiesSortedByIndices;
-        QVariantMap entities = ret.value("entities").toMap();
+        QVariantMap entities = ret.value(QStringLiteral("entities")).toMap();
         foreach (const QString &key, entities.keys()) {
             QVariant entity = entities.value(key);
             if (entity.type() == QVariant::List) {
                 QVariantList e = entity.toList();
                 foreach (const QVariant &ee, e) {
                     QVariantMap eee = ee.toMap();
-                    eee.insert("type", key);
+                    eee.insert(QStringLiteral("type"), key);
                     entitiesSortedByIndices.append(eee);
                 }
             } else {
                 DEBUG() << entity;
             }
         }
-        qSort(entitiesSortedByIndices.begin(), entitiesSortedByIndices.end(), &Status::indicesGreaterThan);
+        std::sort(entitiesSortedByIndices.begin(), entitiesSortedByIndices.end(), &Status::indicesGreaterThan);
         QVariantList media;
         foreach (const QVariant &item, entitiesSortedByIndices) {
             QVariantMap entity = item.toMap();
-            QVariantList indices = entity.value("indices").toList();
+            QVariantList indices = entity.value(QStringLiteral("indices")).toList();
             int start = indices.first().toInt();
             int end = indices.last().toInt();
-            QString type = entity.value("type").toString();
+            QString type = entity.value(QStringLiteral("type")).toString();
             QString plain_textAfter;
             QString rich_textAfter;
-            if (type == "urls") {
-                if (entity.contains("display_url")) {
-                    plain_textAfter = entity.value("display_url").toString();
-                    rich_textAfter = QString("<a class=\"link\" href=\"")
-                            .append(entity.value("expanded_url").toString())
-                            .append("\" title=\"")
-                            .append(entity.value("url").toString())
-                            .append("\">")
-                            .append(entity.value("display_url").toString())
-                            .append("</a>");
+            if (type == QStringLiteral("urls")) {
+                if (entity.contains(QStringLiteral("display_url"))) {
+                    plain_textAfter = entity.value(QStringLiteral("display_url")).toString();
+                    rich_textAfter = QStringLiteral("<a class=\"link\" href=\"")
+                            .append(entity.value(QStringLiteral("expanded_url")).toString())
+                            .append(QStringLiteral("\" title=\""))
+                            .append(entity.value(QStringLiteral("url")).toString())
+                            .append(QStringLiteral("\">"))
+                            .append(entity.value(QStringLiteral("display_url")).toString())
+                            .append(QStringLiteral("</a>"));
                 } else {
-                    plain_textAfter = entity.value("url").toString();
-                    rich_textAfter = QString("<a class=\"link\" href=\"")
-                            .append(entity.value("url").toString())
-                            .append("\" title=\"")
-                            .append(entity.value("url").toString())
-                            .append("\">")
-                            .append(entity.value("url").toString())
-                            .append("</a>");
+                    plain_textAfter = entity.value(QStringLiteral("url")).toString();
+                    rich_textAfter = QStringLiteral("<a class=\"link\" href=\"")
+                            .append(entity.value(QStringLiteral("url")).toString())
+                            .append(QStringLiteral("\" title=\""))
+                            .append(entity.value(QStringLiteral("url")).toString())
+                            .append(QStringLiteral("\">"))
+                            .append(entity.value(QStringLiteral("url")).toString())
+                            .append(QStringLiteral("</a>"));
                 }
-            } else if (type == "user_mentions") {
-                rich_textAfter = QString("<a class=\"screen_name\" href=\"user://%1\" title=\"@%2\">@%2</a>")
-                        .arg(entity.value("id_str").toString())
-                        .arg(entity.value("screen_name").toString());
-            } else if (type == "hashtags") {
-                rich_textAfter = QString("<a class=\"hash_tag\" href=\"search://#%1\" title=\"#%2\">#%2</a>")
-                        .arg(entity.value("text").toString())
-                        .arg(entity.value("text").toString());
-            } else if (type == "media") {
-                plain_textAfter = entity.value("display_url").toString();
-                rich_textAfter = QString("<a class=\"media\" href=\"")
-                        .append(entity.value("media_url").toString())
-                        .append("\" title=\"")
-                        .append(entity.value("url").toString())
-                        .append("\">")
-                        .append(entity.value("display_url").toString())
-                        .append("</a>");
-                media.append(entity.value("media_url"));
+            } else if (type == QStringLiteral("user_mentions")) {
+                rich_textAfter = QStringLiteral("<a class=\"screen_name\" href=\"user://%1\" title=\"@%2\">@%2</a>")
+                        .arg(entity.value(QStringLiteral("id_str")).toString())
+                        .arg(entity.value(QStringLiteral("screen_name")).toString());
+            } else if (type == QStringLiteral("hashtags")) {
+                rich_textAfter = QStringLiteral("<a class=\"hash_tag\" href=\"search://#%1\" title=\"#%2\">#%2</a>")
+                        .arg(entity.value(QStringLiteral("text")).toString())
+                        .arg(entity.value(QStringLiteral("text")).toString());
+            } else if (type == QStringLiteral("media")) {
+                plain_textAfter = entity.value(QStringLiteral("display_url")).toString();
+                rich_textAfter = QStringLiteral("<a class=\"media\" href=\"")
+                        .append(entity.value(QStringLiteral("media_url")).toString())
+                        .append(QStringLiteral("\" title=\""))
+                        .append(entity.value(QStringLiteral("url")).toString())
+                        .append(QStringLiteral("\">"))
+                        .append(entity.value(QStringLiteral("display_url")).toString())
+                        .append(QStringLiteral("</a>"));
+                media.append(entity.value(QStringLiteral("media_url")));
             } else {
                 DEBUG() << type << item;
             }
@@ -391,21 +391,21 @@ QVariantMap Status::parse(const QVariantMap &status)
 
 
 //        DEBUG() << ret.value("text").toString();
-        ret.insert("plain_text", escapeHtml(plain_text));
+        ret.insert(QStringLiteral("plain_text"), escapeHtml(plain_text));
 //        DEBUG() << ret.value("plain_text").toString();
-        ret.insert("rich_text", rich_text.replace("\n", "<br />").replace("\t", "&nbsp;").replace(QString::fromUtf8("　"), "&nbsp;&nbsp;&nbsp;&nbsp;"));
+        ret.insert(QStringLiteral("rich_text"), rich_text.replace(QStringLiteral("\n"), QStringLiteral("<br />")).replace(QStringLiteral("\t"), QStringLiteral("&nbsp;")).replace(QString::fromUtf8("　"), QStringLiteral("&nbsp;&nbsp;&nbsp;&nbsp;")));
 //        DEBUG() << ret.value("rich_text").toString();
-        ret.insert("media", media);
+        ret.insert(QStringLiteral("media"), media);
     } else {
         DEBUG() << text;
-        if (!ret.contains("plain_text"))
-            ret.insert("plain_text", escapeHtml(text));
-        if (!ret.contains("rich_text"))
-            ret.insert("rich_text", text.replace(" ", "&nbsp;").replace("\n", "<br />").replace(QString::fromUtf8("　"), "&nbsp;&nbsp;&nbsp;&nbsp;"));
+        if (!ret.contains(QStringLiteral("plain_text")))
+            ret.insert(QStringLiteral("plain_text"), escapeHtml(text));
+        if (!ret.contains(QStringLiteral("rich_text")))
+            ret.insert(QStringLiteral("rich_text"), text.replace(QStringLiteral(" "), QStringLiteral("&nbsp;")).replace(QStringLiteral("\n"), QStringLiteral("<br />")).replace(QString::fromUtf8("　"), QStringLiteral("&nbsp;&nbsp;&nbsp;&nbsp;")));
     }
 
-    if (ret.contains("retweeted_status") && !ret.value("retweeted_status").isNull()) {
-        ret.insert("retweeted_status", Status::parse(ret.value("retweeted_status").toMap()));
+    if (ret.contains(QStringLiteral("retweeted_status")) && !ret.value(QStringLiteral("retweeted_status")).isNull()) {
+        ret.insert(QStringLiteral("retweeted_status"), Status::parse(ret.value(QStringLiteral("retweeted_status")).toMap()));
     }
     return ret;
 }

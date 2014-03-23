@@ -57,12 +57,12 @@ void TrendsPlace::parseDone(const QVariant &result)
         foreach (const QVariant &result, array) {
             if (result.type() == QVariant::Map) {
                 QVariantMap map = result.toMap();
-                if (map.contains("trends") && map.value("trends").type() == QVariant::List) {
-                    QVariantList trends = map.value("trends").toList();
-                    QAlgorithmsPrivate::qReverse(trends.begin(), trends.end());
+                if (map.contains(QStringLiteral("trends")) && map.value(QStringLiteral("trends")).type() == QVariant::List) {
+                    QVariantList trends = map.value(QStringLiteral("trends")).toList();
+                    std::reverse(trends.begin(), trends.end());
                     foreach (const QVariant &trend, trends) {
                         QVariantMap t = trend.toMap();
-                        t.insert("id_str", t.value("name").toString());
+                        t.insert(QStringLiteral("id_str"), t.value(QStringLiteral("name")).toString());
                         addData(t);
                     }
                 }

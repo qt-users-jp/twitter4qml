@@ -43,16 +43,16 @@ void FriendsList::parseDone(const QVariant &result)
 {
     if (result.type() == QVariant::Map) {
         QVariantMap object = result.toMap();
-        if (object.contains("users") && object.value("users").type() == QVariant::List) {
-            AbstractUsersModel::parseDone(object.value("users"));
+        if (object.contains(QStringLiteral("users")) && object.value(QStringLiteral("users")).type() == QVariant::List) {
+            AbstractUsersModel::parseDone(object.value(QStringLiteral("users")));
         }
-        if (object.contains("next_cursor"))
-            next_cursor(object.value("next_cursor").toInt());
-        if (object.contains("next_cursor_str"))
-            next_cursor_str(object.value("next_cursor_str").toString());
-        if (object.contains("previous_cursor"))
-            previous_cursor(object.value("previous_cursor").toInt());
-        if (object.contains("previous_cursor_str"))
-            previous_cursor_str(object.value("previous_cursor_str").toString());
+        if (object.contains(QStringLiteral("next_cursor")))
+            next_cursor(object.value(QStringLiteral("next_cursor")).toInt());
+        if (object.contains(QStringLiteral("next_cursor_str")))
+            next_cursor_str(object.value(QStringLiteral("next_cursor_str")).toString());
+        if (object.contains(QStringLiteral("previous_cursor")))
+            previous_cursor(object.value(QStringLiteral("previous_cursor")).toInt());
+        if (object.contains(QStringLiteral("previous_cursor_str")))
+            previous_cursor_str(object.value(QStringLiteral("previous_cursor_str")).toString());
     }
 }

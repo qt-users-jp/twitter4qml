@@ -37,7 +37,7 @@ public:
     explicit FavoritesDestroy(QObject *parent = 0);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/favorites/destroy.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/favorites/destroy.json")); }
 };
 
 #endif // FAVORITESDESTROY_H

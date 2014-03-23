@@ -86,13 +86,13 @@ void GeoReverseGeocode::reload()
 void GeoReverseGeocode::parseDone(const QVariant &result)
 {
 //    DEBUG() << result;
-    if (result.type() == QVariant::Map && result.toMap().value("result").type() == QVariant::Map) {
-        QVariantList array = result.toMap().value("result").toMap().value("places").toList();
+    if (result.type() == QVariant::Map && result.toMap().value(QStringLiteral("result")).type() == QVariant::Map) {
+        QVariantList array = result.toMap().value(QStringLiteral("result")).toMap().value(QStringLiteral("places")).toList();
         foreach (const QVariant &result, array) {
             if (result.type() == QVariant::Map) {
                 QVariantMap map = result.toMap();
 //                DEBUG() << map.keys();
-                map.insert("id_str", map.value("id").toString());
+                map.insert(QStringLiteral("id_str"), map.value(QStringLiteral("id")).toString());
                 addData(map);
             }
         }

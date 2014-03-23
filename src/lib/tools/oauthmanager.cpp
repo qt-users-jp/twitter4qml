@@ -93,7 +93,7 @@ void OAuthManager::Private::setToken(const QString &token)
     if (token.isEmpty()) {
         requestParams.clear();
     } else if (!requestParams.isEmpty()){
-        requestParams["oauth_token"] = token.toUtf8();
+        requestParams[QStringLiteral("oauth_token")] = token.toUtf8();
     }
 }
 
@@ -115,46 +115,46 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
     nonce.setNum(dt.toMSecsSinceEpoch());
 
     if (requestParams.isEmpty()) {
-        requestParams["oauth_version"] = "1.0";
-        requestParams["oauth_signature_method"] = "HMAC-SHA1";
-        requestParams["oauth_consumer_key"] = consumerKey.toUtf8();
+        requestParams[QStringLiteral("oauth_version")] = "1.0";
+        requestParams[QStringLiteral("oauth_signature_method")] = "HMAC-SHA1";
+        requestParams[QStringLiteral("oauth_consumer_key")] = consumerKey.toUtf8();
         if (!token.isEmpty())
-            requestParams["oauth_token"] = token.toUtf8();
+            requestParams[QStringLiteral("oauth_token")] = token.toUtf8();
     }
-    requestParams["oauth_nonce"] = nonce.toUtf8();
-    requestParams["oauth_timestamp"] = timestamp.toUtf8();
+    requestParams[QStringLiteral("oauth_nonce")] = nonce.toUtf8();
+    requestParams[QStringLiteral("oauth_timestamp")] = timestamp.toUtf8();
 //    DEBUG() << url.host();
-    if (url.path().endsWith("update_with_media.json", Qt::CaseInsensitive)) {
-        requestParams["oauth_signature"] =  signature(method,
+    if (url.path().endsWith(QStringLiteral("update_with_media.json"), Qt::CaseInsensitive)) {
+        requestParams[QStringLiteral("oauth_signature")] =  signature(method,
                                                       url,
                                                       normalize(signatureParams(QMultiMap<QString, QByteArray>())));
     } else {
-        requestParams["oauth_signature"] =  signature(method,
+        requestParams[QStringLiteral("oauth_signature")] =  signature(method,
                                                       url,
                                                       normalize(signatureParams(params)));
     }
-    if (method == "POST") {
+    if (method == QStringLiteral("POST")) {
         switch (authorizeBy) {
         case AuthorizeByHeader:
             if (multiPart) {
                 request.setRawHeader("Authorization", authHeader());
                 request.setUrl(url);
-                QString boundary = QString("--------------------") + nonce;
+                QString boundary = QStringLiteral("--------------------%1").arg(nonce);
                 QByteArray body;
                 QList<QString> keys = params.keys();
                 foreach(const QString &key, keys) {
                     QList<QByteArray> vals = params.values(key);
                     foreach(const QByteArray &val, vals) {
-                        body.append(QString("--%1\r\n").arg(boundary).toUtf8());
-                        if (key == "media[]") {
+                        body.append(QStringLiteral("--%1\r\n").arg(boundary).toUtf8());
+                        if (key == QStringLiteral("media[]")) {
                             QUrl url;
                             if (val.startsWith(":")) {
-                                url = QUrl(QString("qrc%1").arg(QString::fromUtf8(val)));
+                                url = QUrl(QStringLiteral("qrc%1").arg(QString::fromUtf8(val)));
                             } else {
-                                url = QUrl::fromLocalFile(val);
+                                url = QUrl::fromLocalFile(QString::fromUtf8(val));
                             }
                             QFileInfo info(url.path());
-                            QFile file(val);
+                            QFile file(QString::fromUtf8(val));
                             QByteArray data;
                             if (file.open(QFile::ReadOnly)) {
                                 data = file.readAll();
@@ -163,14 +163,14 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                             } else {
                                 DEBUG() << val << file.errorString();
                             }
-                            body.append(QString("Content-Disposition: form-data; name=\"%1\"; filename=\"%2\"\r\n").arg(key).arg(info.fileName()).toUtf8());
+                            body.append(QStringLiteral("Content-Disposition: form-data; name=\"%1\"; filename=\"%2\"\r\n").arg(key).arg(info.fileName()).toUtf8());
                             body.append("Content-Type: application/octet-stream\r\n");
 //                            body.append("Content-Transfer-Encoding: binary\r\n");
                             body.append("\r\n");
                             body.append(data);
                             body.append("\r\n");
                         } else {
-                            body.append(QString("Content-Disposition: form-data; name=\"%1\"\r\n").arg(key).toUtf8());
+                            body.append(QStringLiteral("Content-Disposition: form-data; name=\"%1\"\r\n").arg(key).toUtf8());
                             body.append("\r\n");
                             body.append(val);
                             body.append("\r\n");
@@ -178,10 +178,10 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                         DEBUG() << key << val << body.size();
                     }
                 }
-                body.append(QString("\r\n--%1--\r\n").arg(boundary).toUtf8());
+                body.append(QStringLiteral("\r\n--%1--\r\n").arg(boundary).toUtf8());
                 DEBUG() << body.data();
                 request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(body.length()).toUtf8());
-                request.setHeader(QNetworkRequest::ContentTypeHeader, QString("multipart/form-data; boundary=%1").arg(boundary).toUtf8());
+                request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("multipart/form-data; boundary=%1").arg(boundary).toUtf8());
 
                 foreach (const QByteArray &rawHeader, request.rawHeaderList()) {
                     DEBUG() << rawHeader << request.rawHeader(rawHeader);
@@ -205,7 +205,7 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                 QList<QByteArray> vals = requestParams.values(key);
                 foreach(const QByteArray &val, vals) {
 #if QT_VERSION >= 0x050000
-                    query.addQueryItem(key, val);
+                    query.addQueryItem(key, QString::fromUtf8(val));
 #else
                     qurl.addEncodedQueryItem(parameterEncoding(key), val.toPercentEncoding());
 #endif
@@ -231,7 +231,7 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                 QList<QByteArray> vals = allParams.values(key);
                 foreach(const QByteArray &val, vals) {
 #if QT_VERSION >= 0x050000
-                    query.addQueryItem(key, val);
+                    query.addQueryItem(key, QString::fromUtf8(val));
 #else
                     qurl.addEncodedQueryItem(parameterEncoding(key), val.toPercentEncoding());
 #endif
@@ -241,13 +241,13 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
             qurl.setQuery(query);
 #endif
             request.setUrl(qurl);
-            request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+            request.setHeader(QNetworkRequest::ContentTypeHeader, QByteArrayLiteral("application/x-www-form-urlencoded"));
             ret = q->networkAccessManager()->post(request, QByteArray());
             break;
         }
         }
 
-    } else if (method == "GET") {
+    } else if (method == QStringLiteral("GET")) {
         switch (authorizeBy) {
         case AuthorizeByHeader: {
             request.setRawHeader("Authorization", authHeader());
@@ -260,7 +260,7 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                 QList<QByteArray> vals = params.values(key);
                 foreach(const QByteArray &val, vals) {
 #if QT_VERSION >= 0x050000
-                    query.addQueryItem(key, val);
+                    query.addQueryItem(key, QString::fromUtf8(val));
 #else
                     qurl.addEncodedQueryItem(parameterEncoding(key), val.toPercentEncoding());
 #endif
@@ -288,7 +288,7 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                 QList<QByteArray> vals = allParams.values(key);
                 foreach(const QByteArray &val, vals) {
 #if QT_VERSION >= 0x050000
-                    query.addQueryItem(key, val);
+                    query.addQueryItem(key, QString::fromUtf8(val));
 #else
                     qurl.addEncodedQueryItem(parameterEncoding(key), val.toPercentEncoding());
 #endif
@@ -322,20 +322,20 @@ QNetworkReply *OAuthManager::Private::echo(const QString &method, const QUrl &ur
     nonce.setNum(dt.toMSecsSinceEpoch());
 
     if (requestParams.isEmpty()) {
-        requestParams["oauth_version"] = "1.0";
-        requestParams["oauth_signature_method"] = "HMAC-SHA1";
-        requestParams["oauth_consumer_key"] = consumerKey.toUtf8();
+        requestParams[QStringLiteral("oauth_version")] = "1.0";
+        requestParams[QStringLiteral("oauth_signature_method")] = "HMAC-SHA1";
+        requestParams[QStringLiteral("oauth_consumer_key")] = consumerKey.toUtf8();
         if (!token.isEmpty())
-            requestParams["oauth_token"] = token.toUtf8();
+            requestParams[QStringLiteral("oauth_token")] = token.toUtf8();
     }
-    requestParams["oauth_nonce"] = nonce.toUtf8();
-    requestParams["oauth_timestamp"] = timestamp.toUtf8();
+    requestParams[QStringLiteral("oauth_nonce")] = nonce.toUtf8();
+    requestParams[QStringLiteral("oauth_timestamp")] = timestamp.toUtf8();
 
-    requestParams["oauth_signature"] = signature("GET",
+    requestParams[QStringLiteral("oauth_signature")] = signature(QStringLiteral("GET"),
                                                   serviceProvider,
                                                   normalize(signatureParams(QMultiMap<QString, QByteArray>())));
 
-    if (method == "POST") {
+    if (method == QStringLiteral("POST")) {
         switch (authorizeBy) {
         case AuthorizeByHeader:
 //            DEBUG() << url;
@@ -343,18 +343,18 @@ QNetworkReply *OAuthManager::Private::echo(const QString &method, const QUrl &ur
                 request.setRawHeader("X-Auth-Service-Provider", serviceProvider.toString().toUtf8());
                 request.setRawHeader("X-Verify-Credentials-Authorization", authHeader(QMultiMap<QString, QByteArray>(), realm));
                 request.setUrl(url);
-                QString boundary = QString("--------------------") + nonce;
+                QString boundary = QStringLiteral("--------------------%1").arg(nonce);
                 QByteArray body;
                 QList<QString> keys = params.keys();
                 foreach(const QString &key, keys) {
                     QList<QByteArray> vals = params.values(key);
                     foreach(const QByteArray &val, vals) {
-                        body.append(QString("--%1\r\n").arg(boundary).toUtf8());
-                        if (key == "media") {
-                            QUrl url(val);
+                        body.append(QStringLiteral("--%1\r\n").arg(boundary).toUtf8());
+                        if (key == QStringLiteral("media")) {
+                            QUrl url(QString::fromUtf8(val));
                             QFileInfo info(url.path());
                             QFile file(info.filePath());
-                            body.append(QString("Content-Disposition: file; name=\"%1\"; filename=\"%2\"\r\n").arg(key).arg(info.fileName()).toUtf8());
+                            body.append(QStringLiteral("Content-Disposition: file; name=\"%1\"; filename=\"%2\"\r\n").arg(key).arg(info.fileName()).toUtf8());
                             body.append("Content-Type: application/octetstream\r\n");
 //                            body.append("Content-Transfer-Encoding: binary\r\n");
                             body.append("\r\n");
@@ -366,7 +366,7 @@ QNetworkReply *OAuthManager::Private::echo(const QString &method, const QUrl &ur
                             }
                             body.append("\r\n");
                         } else {
-                            body.append(QString("Content-Disposition: form-data; name=\"%1\"\r\n").arg(key).toUtf8());
+                            body.append(QStringLiteral("Content-Disposition: form-data; name=\"%1\"\r\n").arg(key).toUtf8());
                             body.append("\r\n");
                             body.append(val);
                             body.append("\r\n");
@@ -374,10 +374,10 @@ QNetworkReply *OAuthManager::Private::echo(const QString &method, const QUrl &ur
 //                        DEBUG() << key << val << body.size();
                     }
                 }
-                body.append(QString("\r\n--%1--\r\n").arg(boundary).toUtf8());
+                body.append(QStringLiteral("\r\n--%1--\r\n").arg(boundary).toUtf8());
 //                DEBUG() << body.data();
                 request.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(body.length()).toUtf8());
-                request.setHeader(QNetworkRequest::ContentTypeHeader, QString("multipart/form-data; boundary=%1").arg(boundary).toUtf8());
+                request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("multipart/form-data; boundary=%1").arg(boundary).toUtf8());
 
 //                foreach (const QByteArray &rawHeader, request.rawHeaderList()) {
 //                    DEBUG() << rawHeader << request.rawHeader(rawHeader);
@@ -395,7 +395,7 @@ QNetworkReply *OAuthManager::Private::echo(const QString &method, const QUrl &ur
             DEBUG() << authorizeBy << "not handled";
             break;
         }
-    } else if (method == "GET") {
+    } else if (method == QStringLiteral("GET")) {
 
     }
     return ret;
@@ -433,7 +433,7 @@ QByteArray OAuthManager::Private::signature(const QString &method, const QUrl &u
 QMultiMap<QString, QByteArray> OAuthManager::Private::signatureParams(const QMultiMap<QString, QByteArray> &params) const
 {
     QMultiMap<QString, QByteArray> ret(requestParams);
-    ret.remove("oauth_signature");
+    ret.remove(QStringLiteral("oauth_signature"));
     ret += params;
     return ret;
 }
@@ -482,10 +482,10 @@ bool OAuthManager::Private::updateToken(QNetworkReply* reply)
         qDebug() << "error : " << reply->errorString();
         return false;
     }
-    QRegExp exp("(([^=&?]+)=([^=&?]+))(&([^=&?]+)=([^=&?]+))*");
+    QRegExp exp(QStringLiteral("(([^=&?]+)=([^=&?]+))(&([^=&?]+)=([^=&?]+))*"));
     QByteArray result = reply->readAll();
     DEBUG() << result;
-    if (!exp.exactMatch(result)) {
+    if (!exp.exactMatch(QString::fromUtf8(result))) {
         return false;
     }
     QList<QByteArray> params = result.split('&');
@@ -495,16 +495,16 @@ bool OAuthManager::Private::updateToken(QNetworkReply* reply)
         QByteArray val = QByteArray::fromPercentEncoding(tmp.at(1));
         DEBUG() << key << val;
         if (key == "oauth_token_secret") {
-            q->setTokenSecret(val);
+            q->setTokenSecret(QString::fromUtf8(val));
         } else if (key == "user_id") {
-            q->user_id(val);
+            q->user_id(QString::fromUtf8(val));
         } else if (key == "screen_name") {
-            q->screen_name(val);
+            q->screen_name(QString::fromUtf8(val));
         } else {
             if (key == "oauth_token") {
-                q->setToken(val);
+                q->setToken(QString::fromUtf8(val));
             }
-            requestParams[key] = val;
+            requestParams[QString::fromUtf8(key)] = val;
         }
     }
     return true;

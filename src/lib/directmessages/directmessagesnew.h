@@ -46,7 +46,7 @@ signals:
     void textChanged(const QString &text);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/direct_messages/new.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/direct_messages/new.json")); }
 };
 
 #endif // DIRECTMESSAGESNEW_H

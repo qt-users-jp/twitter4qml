@@ -36,6 +36,6 @@ void UsersSuggestionsSlug::parseDone(const QVariant &result)
 //    DEBUG() << result;
     if (result.type() == QVariant::Map) {
         QVariantMap map = result.toMap();
-        AbstractUsersModel::parseDone(map.value("users"));
+        AbstractUsersModel::parseDone(map.value(QStringLiteral("users")));
     }
 }

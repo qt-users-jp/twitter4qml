@@ -67,7 +67,7 @@ signals:
     void previous_cursor_strChanged(const QString &previous_cursor_str) const;
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/members.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/members.json")); }
     void parseDone(const QVariant &result);
 
 private:

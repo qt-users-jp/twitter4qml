@@ -43,8 +43,8 @@ public:
 
 protected:
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
-    QString httpMethod() const { return "GET"; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/help/languages.json"); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/help/languages.json")); }
     void parseDone(const QVariant &result);
 };
 

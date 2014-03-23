@@ -73,8 +73,8 @@ signals:
 
 protected:
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    QString httpMethod() const { return "GET"; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/geo/search.json"); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/geo/search.json")); }
     void parseDone(const QVariant &result);
 
 private:

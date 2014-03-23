@@ -50,8 +50,8 @@ signals:
 protected:
     bool isStreaming() const { return true; }
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
-    QUrl api() const { return QUrl("https://stream.twitter.com/1.1/statuses/sample.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://stream.twitter.com/1.1/statuses/sample.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
     void parseDone(const QVariant &result);
 
 private:

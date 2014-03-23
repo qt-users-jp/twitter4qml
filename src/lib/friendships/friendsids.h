@@ -48,7 +48,7 @@ signals:
     void countChanged(int count);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/friends/ids.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/friends/ids.json")); }
 };
 
 #endif // FRIENDSIDS_H

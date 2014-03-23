@@ -37,7 +37,7 @@ void UsersShow::exec()
     DataManager *manager = DataManager::instance();
     if (!user_id().isEmpty() && manager->contains(DataManager::UserData, user_id())) {
         QVariantMap user = manager->getData(DataManager::UserData, user_id());
-        if (user.value("description").isNull()) {
+        if (user.value(QStringLiteral("description")).isNull()) {
             AbstractUsersAction::exec();
         } else {
             setData(user);

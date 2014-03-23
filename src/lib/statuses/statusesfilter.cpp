@@ -36,7 +36,7 @@ public:
     QString track;
 };
 
-StatusesFilter::Private::Private() : delimited("length") {}
+StatusesFilter::Private::Private() : delimited(QStringLiteral("length")) {}
 
 StatusesFilter::StatusesFilter(QObject *parent)
     : AbstractStatusesModel(parent)
@@ -65,7 +65,7 @@ void StatusesFilter::parseDone(const QVariant &result)
     switch (result.type()) {
     case QVariant::Map: {
         QVariantMap object = result.toMap();
-        if (object.keys().contains("text")) {
+        if (object.keys().contains(QStringLiteral("text"))) {
             addData(Status::parse(object));
         } else {
             DEBUG() << object;

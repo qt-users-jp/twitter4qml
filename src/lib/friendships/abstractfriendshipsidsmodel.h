@@ -62,7 +62,7 @@ signals:
 
 protected:
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    QString httpMethod() const { return "GET"; }
+    QString httpMethod() const { return QStringLiteral("GET"); }
     void parseDone(const QVariant &result);
 
 private:

@@ -37,7 +37,7 @@ public:
     explicit UsersReportSpam(QObject *parent = 0);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/users/report_spam.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/users/report_spam.json")); }
 };
 
 #endif // UESRSREPORTSPAM_H

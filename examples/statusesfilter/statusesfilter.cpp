@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 
 #if QT_VERSION >= 0x050000
     QQuickView view;
-    view.setSource(QUrl("qrc:/2.x/main.qml"));
+    view.setSource(QUrl(QStringLiteral("qrc:/2.x/main.qml")));
 #else
     QDir dir(app.applicationDirPath());
     dir.cdUp();
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     dir.cd("imports");
     QDeclarativeView view;
     view.engine()->addImportPath(dir.absolutePath());
-    view.setSource(QUrl("qrc:/1.x/main.qml"));
+    view.setSource(QUrl(QStringLiteral("qrc:/1.x/main.qml")));
 #endif
     view.show();
 

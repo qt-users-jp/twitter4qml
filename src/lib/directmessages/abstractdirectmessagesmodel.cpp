@@ -57,7 +57,7 @@ AbstractTwitterModel::AuthorizeBy AbstractDirectMessagesModel::authenticationMet
 
 QString AbstractDirectMessagesModel::httpMethod() const
 {
-    return "GET";
+    return QStringLiteral("GET");
 }
 
 void AbstractDirectMessagesModel::parseDone(const QVariant &result)

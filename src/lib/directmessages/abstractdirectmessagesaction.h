@@ -45,7 +45,7 @@ signals:
 
 protected:
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    QString httpMethod() const { return "POST"; }
+    QString httpMethod() const { return QStringLiteral("POST"); }
 
 private:
     ADD_PROPERTY(const QString &, user_id, QString)

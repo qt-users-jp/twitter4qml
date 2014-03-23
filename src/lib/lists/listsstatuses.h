@@ -57,7 +57,7 @@ signals:
     void include_rtsChanged(bool include_rts);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/statuses.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/statuses.json")); }
 
     ADD_PROPERTY(const QString &, slug, QString)
     ADD_PROPERTY(bool, include_rts, bool)

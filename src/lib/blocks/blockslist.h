@@ -45,7 +45,7 @@ signals:
     void cursorChanged(const QString &cursor);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/blocks/list.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/blocks/list.json")); }
 
 private:
     ADD_PROPERTY(bool, skip_status, bool)

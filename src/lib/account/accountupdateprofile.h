@@ -51,7 +51,7 @@ signals:
     void skip_statusChanged(bool skip_status);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/account/update_profile.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/account/update_profile.json")); }
 
 private:
     ADD_PROPERTY(const QString &, name, QString)

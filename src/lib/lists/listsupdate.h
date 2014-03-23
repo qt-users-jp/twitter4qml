@@ -56,7 +56,7 @@ signals:
     void owner_idChanged(const QString &owner_id);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/update.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/update.json")); }
 };
 
 #endif // LISTSUPDATE_H

@@ -42,8 +42,8 @@ signals:
 
 protected:
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/help/tos.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/help/tos.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
 
 private:
     ADD_PROPERTY(const QString &, tos, QString)

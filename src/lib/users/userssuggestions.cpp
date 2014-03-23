@@ -41,11 +41,11 @@ void UsersSuggestions::parseDone(const QVariant &result)
 //    DEBUG() << result;
     if (result.type() == QVariant::List) {
         QVariantList array = result.toList();
-        QAlgorithmsPrivate::qReverse(array.begin(), array.end());
+        std::reverse(array.begin(), array.end());
         foreach (const QVariant &result, array) {
             if (result.type() == QVariant::Map) {
                 QVariantMap map = result.toMap();
-                map.insert("id_str", map.value("slug").toString());
+                map.insert(QStringLiteral("id_str"), map.value(QStringLiteral("slug")).toString());
                 addData(map);
             }
         }

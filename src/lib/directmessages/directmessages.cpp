@@ -36,7 +36,7 @@ DirectMessages::DirectMessages(QObject *parent)
 void DirectMessages::dataAdded(const QString &key, const QVariantMap &value)
 {
     Q_UNUSED(key)
-    if (value.value("recipient").toMap().value("id_str").toString() == OAuthManager::instance().user_id()) {
+    if (value.value(QStringLiteral("recipient")).toMap().value(QStringLiteral("id_str")).toString() == OAuthManager::instance().user_id()) {
         addData(value);
     }
 }

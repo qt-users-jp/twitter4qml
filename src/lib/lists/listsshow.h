@@ -74,8 +74,8 @@ signals:
     void uriChanged(const QString &uri);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/show.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/show.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
 
 private:
     ADD_PROPERTY(const QString &, created_at, QString)

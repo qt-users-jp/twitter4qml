@@ -37,7 +37,7 @@ public:
     QStringList friends;
 };
 
-UserStream::Private::Private() : delimited("length") {}
+UserStream::Private::Private() : delimited(QStringLiteral("length")) {}
 
 UserStream::UserStream(QObject *parent)
     : AbstractStatusesModel(parent)
@@ -56,32 +56,32 @@ void UserStream::parseDone(const QVariant &result)
     switch (result.type()) {
     case QVariant::Map: {
         QVariantMap object = result.toMap();
-        if (object.keys().contains("text")) {
+        if (object.keys().contains(QStringLiteral("text"))) {
             addData(Status::parse(result.toMap()));
-        } else if (object.keys().contains("friends")) {
+        } else if (object.keys().contains(QStringLiteral("friends"))) {
             d->friends.clear();
-            QVariantList list = object.value("friends").toList();
+            QVariantList list = object.value(QStringLiteral("friends")).toList();
             foreach (const QVariant &id, list) {
                 d->friends.append(id.toString());
             }
             emit friendsChanged(d->friends);
-        } else if (object.keys().contains("event")) {
-            DEBUG() << object.value("event").toString() << object;
-            if (object.value("event").toString() == "follow") {
+        } else if (object.keys().contains(QStringLiteral("event"))) {
+            DEBUG() << object.value(QStringLiteral("event")).toString() << object;
+            if (object.value(QStringLiteral("event")).toString() == QStringLiteral("follow")) {
                 emit followedBy(Status::parse(object));
-            } else if (object.value("event").toString() == "favorite") {
+            } else if (object.value(QStringLiteral("event")).toString() == QStringLiteral("favorite")) {
                 emit favorited(Status::parse(object));
-            } else if (object.value("event").toString() == "unfavorite") {
+            } else if (object.value(QStringLiteral("event")).toString() == QStringLiteral("unfavorite")) {
                 emit unfavorited(Status::parse(object));
             } else {
-                DEBUG() << object.value("event").toString() << object;
+                DEBUG() << object.value(QStringLiteral("event")).toString() << object;
             }
-        } else if (object.keys().contains("direct_message")) {
-            QVariantMap directMessage = object.value("direct_message").toMap();
+        } else if (object.keys().contains(QStringLiteral("direct_message"))) {
+            QVariantMap directMessage = object.value(QStringLiteral("direct_message")).toMap();
             DEBUG() << directMessage;
-            DataManager::instance()->addData(DataManager::DirectMessageData, directMessage.value("id_str").toString(), DirectMessage::parse(directMessage));
-        } else if (object.keys().contains("delete")) {
-            DataManager::instance()->removeData(DataManager::StatusData, object.value("delete").toMap().value("status").toMap().value("id_str").toString());
+            DataManager::instance()->addData(DataManager::DirectMessageData, directMessage.value(QStringLiteral("id_str")).toString(), DirectMessage::parse(directMessage));
+        } else if (object.keys().contains(QStringLiteral("delete"))) {
+            DataManager::instance()->removeData(DataManager::StatusData, object.value(QStringLiteral("delete")).toMap().value(QStringLiteral("status")).toMap().value(QStringLiteral("id_str")).toString());
         } else {
             DEBUG() << object;
         }

@@ -78,7 +78,7 @@ protected:
     virtual QUrl api() const = 0;
     virtual bool isMultiPart() const { return false; }
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    virtual QString httpMethod() const { return "POST"; }
+    virtual QString httpMethod() const { return QStringLiteral("POST"); }
 
 private:
     class Private;

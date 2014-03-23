@@ -60,8 +60,8 @@ signals:
     void time_zoneChanged(const QVariantMap &time_zone);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/account/settings.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/account/settings.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
 
 private:
     ADD_PROPERTY(bool, always_use_https, bool)

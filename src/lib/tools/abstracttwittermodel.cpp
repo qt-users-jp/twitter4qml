@@ -100,15 +100,15 @@ private:
 
 AbstractTwitterModel::Private::Private(AbstractTwitterModel *parent)
     : QObject(parent)
-    , xrlLimit(0)
-    , xrlRemaining(0)
     , enabled(true)
     , isLoading(false)
     , pushOrder(PushNewerToOlder)
     , filtering(false)
+    , xrlLimit(0)
+    , xrlRemaining(0)
     , q(parent)
 {
-    ids.append("0");
+    ids.append(QStringLiteral("0"));
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
     timer.setSingleShot(false);
     timer.setInterval(10);
@@ -159,31 +159,31 @@ void AbstractTwitterModel::Private::reload()
         bool ok;
         switch (value.type()) {
         case QVariant::Bool:
-            params.insert(key, value.toString().toUtf8());
-            body.append(QString("%1=%2").arg(key).arg(value.toString()));
+            params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+            body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
         break;
         case QVariant::String:
             if (!value.toString().isEmpty()) {
-                params.insert(key, value.toString().toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(value.toString()));
+                params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             }
             break;
         case QVariant::Double:
             if (!qFuzzyCompare(value.toDouble(&ok), 0.0) && ok && !qIsNaN(value.toDouble())) {
                 QString val = QString::number(value.toDouble(), 'f');
-                params.insert(key, val.toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(val));
+                params.insert(QString::fromUtf8(key), val.toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(val));
             }
             break;
         case QVariant::Int:
             if (value.toInt(&ok) != 0 && ok) {
-                params.insert(key, value.toString().toUtf8());
-                body.append(QString("%1=%2").arg(key).arg(value.toString()));
+                params.insert(QString::fromUtf8(key), value.toString().toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             }
             break;
         case QVariant::LongLong:
             if (value.toLongLong(&ok) != 0 && ok) {
-                body.append(QString("%1=%2").arg(key).arg(value.toString()));
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toString()));
             }
             break;
         default:
@@ -245,7 +245,7 @@ void AbstractTwitterModel::Private::reset()
     stack.clear();
     q->beginRemoveRows(QModelIndex(), 0, ids.count());
     ids.clear();
-    ids.append("0");
+    ids.append(QStringLiteral("0"));
     q->endRemoveRows();
 }
 
@@ -377,7 +377,7 @@ void AbstractTwitterModel::Private::timeout()
         case Private::Add: {
             QVariantMap item = action.second.toMap();
             if (sortKey.isNull()) {
-                QString id = item.value("id_str").toString();
+                QString id = item.value(QStringLiteral("id_str")).toString();
                 if (pushOrder != PushAtOnce) {
                     filtering = false;
                     emit q->filtering(item);
@@ -435,7 +435,7 @@ void AbstractTwitterModel::Private::timeout()
             break;
         case Private::Update: {
             QVariantMap item = action.second.toMap();
-            QString id = item.value("id_str").toString();
+            QString id = item.value(QStringLiteral("id_str")).toString();
             for (int i = 0; i < size - 1; i++) {
                 if (ids.at(i) == id) {
                     emit q->dataChanged(q->index(i), q->index(i));
@@ -497,11 +497,13 @@ void AbstractTwitterModel::Private::dataChanged(DataManager::DataType type, cons
 void AbstractTwitterModel::Private::sortKeyChanged(const QString &sortKey)
 {
     // TODO: restore data
+    Q_UNUSED(sortKey)
 }
 
 void AbstractTwitterModel::Private::cacheKeyChanged(const QString &cacheKey)
 {
     // TODO: restore data
+    Q_UNUSED(cacheKey)
 }
 
 AbstractTwitterModel::AbstractTwitterModel(QObject *parent)
@@ -535,10 +537,10 @@ void AbstractTwitterModel::setParameters(const QVariantMap &parameters)
     for (int i = 0; i < mo->propertyCount(); i++) {
         QMetaProperty prop = mo->property(i);
         const char *key = prop.name();
-        if (QString(key) == QLatin1String("loading")) continue;
-        if (QString(key) == QLatin1String("size")) continue;
-        if (parameters.contains(key)) {
-            setProperty(key, parameters.value(key));
+        if (QString::fromUtf8(key) == QStringLiteral("loading")) continue;
+        if (QString::fromUtf8(key) == QStringLiteral("size")) continue;
+        if (parameters.contains(QString::fromUtf8(key))) {
+            setProperty(key, parameters.value(QString::fromUtf8(key)));
         }
     }
 }
@@ -661,7 +663,7 @@ QVariant AbstractTwitterModel::data(const QModelIndex &index, int role) const
         return ret;
 
     if (roleNames().contains(role)) {
-        ret = DataManager::instance()->getData(dataType(), d->ids.at(index.row())).value(roleNames().value(role));
+        ret = DataManager::instance()->getData(dataType(), d->ids.at(index.row())).value(QString::fromUtf8(roleNames().value(role)));
     } else {
         DEBUG() << role << "not found in" << roleNames();
     }

@@ -35,11 +35,11 @@ StatusesMentionsTimeline::StatusesMentionsTimeline(QObject *parent)
 void StatusesMentionsTimeline::dataAdded(const QString &key, const QVariantMap &value)
 {
     Q_UNUSED(key)
-    QVariantMap entities = value.value("entities").toMap();
-    QVariantList user_mentions = entities.value("user_mentions").toList();
+    QVariantMap entities = value.value(QStringLiteral("entities")).toMap();
+    QVariantList user_mentions = entities.value(QStringLiteral("user_mentions")).toList();
     QString id_str = OAuthManager::instance().user_id();
     foreach (const QVariant &user_mention, user_mentions) {
-        if (user_mention.toMap().value("id_str").toString() == id_str) {
+        if (user_mention.toMap().value(QStringLiteral("id_str")).toString() == id_str) {
             addData(value);
             break;
         }

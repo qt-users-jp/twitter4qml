@@ -34,7 +34,7 @@ public:
     QString delimited;
 };
 
-StatusesSample::Private::Private() : delimited("length") {}
+StatusesSample::Private::Private() : delimited(QStringLiteral("length")) {}
 
 StatusesSample::StatusesSample(QObject *parent)
     : AbstractStatusesModel(parent)
@@ -61,7 +61,7 @@ void StatusesSample::parseDone(const QVariant &result)
     switch (result.type()) {
     case QVariant::Map: {
         QVariantMap object = result.toMap();
-        if (object.keys().contains("text")) {
+        if (object.keys().contains(QStringLiteral("text"))) {
             addData(Status::parse(object));
 //        } else {
 //            DEBUG() << object;

@@ -46,9 +46,9 @@ signals:
     void retweetsChanged(bool retweets);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/friendships/update.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/friendships/update.json")); }
     AuthorizeBy authenticationMethod() const { return AuthorizeByUrl; }
-    QString httpMethod() const { return "POST"; }
+    QString httpMethod() const { return QStringLiteral("POST"); }
 
 private:
     ADD_PROPERTY(const QString &, user_id, QString)

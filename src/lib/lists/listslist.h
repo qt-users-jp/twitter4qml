@@ -44,7 +44,7 @@ signals:
     void screen_nameChanged(const QString &screen_name);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/list.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/list.json")); }
 };
 
 #endif // LISTSLIST_H

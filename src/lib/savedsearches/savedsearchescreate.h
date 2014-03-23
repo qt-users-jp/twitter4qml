@@ -42,7 +42,7 @@ signals:
 
 protected:
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/saved_searches/create.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/saved_searches/create.json")); }
 
 private:
     ADD_PROPERTY(const QString &, query, QString)

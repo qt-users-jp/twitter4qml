@@ -123,9 +123,9 @@ void List::Private::id_strChanged(const QString &id)
 void List::Private::create(const QVariantMap &parameters)
 {
     ListsCreate *action = new ListsCreate(this);
-    action->description(parameters.value("description").toString());
-    action->mode(parameters.value("mode").toString());
-    action->name(parameters.value("name").toString());
+    action->description(parameters.value(QStringLiteral("description")).toString());
+    action->mode(parameters.value(QStringLiteral("mode")).toString());
+    action->name(parameters.value(QStringLiteral("name")).toString());
     connect(action, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
     if (loading) {
         tasks.append(action);
@@ -139,9 +139,9 @@ void List::Private::update(const QVariantMap &parameters)
 {
     ListsUpdate *action = new ListsUpdate(this);
     action->list_id(id_str);
-    action->description(parameters.value("description").toString());
-    action->mode(parameters.value("mode").toString());
-    action->name(parameters.value("name").toString());
+    action->description(parameters.value(QStringLiteral("description")).toString());
+    action->mode(parameters.value(QStringLiteral("mode")).toString());
+    action->name(parameters.value(QStringLiteral("name")).toString());
     connect(action, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
     if (loading) {
         tasks.append(action);
@@ -201,15 +201,15 @@ void List::Private::dataChanged(const QVariant &data)
             QMetaProperty prop = mo->property(i);
             if (!prop.isDesignable()) continue;
             const char *key = prop.name();
-            if (list.contains(key)) {
-                if (QLatin1String("following") == key) {
+            if (list.contains(QString::fromUtf8(key))) {
+                if (QStringLiteral("following") == QString::fromUtf8(key)) {
 //                    if (qobject_cast<AbstractFriendshipsAction *>(sender())) {
 //                        q->setProperty(key, !list.value(key).toBool());
 //                    } else {
-                        q->setProperty(key, list.value(key));
+                        q->setProperty(key, list.value(QString::fromUtf8(key)));
 //                    }
                 } else {
-                    q->setProperty(key, list.value(key));
+                    q->setProperty(key, list.value(QString::fromUtf8(key)));
                 }
             } else {
                 q->setProperty(key, QVariant());
@@ -418,7 +418,7 @@ QVariantMap List::data() const
         QMetaProperty prop = mo->property(i);
         if (!prop.isDesignable()) continue;
         const char *key = prop.name();
-        ret.insert(key, property(key));
+        ret.insert(QString::fromUtf8(key), property(key));
     }
     return ret;
 }

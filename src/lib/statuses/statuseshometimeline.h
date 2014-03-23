@@ -55,7 +55,7 @@ signals:
 
 protected:
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/statuses/home_timeline.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/statuses/home_timeline.json")); }
 
     ADD_PROPERTY(bool, exclude_replies, bool)
 };

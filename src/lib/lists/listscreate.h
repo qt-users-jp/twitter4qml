@@ -45,7 +45,7 @@ signals:
     void descriptionChanged(const QString &description);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/create.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/create.json")); }
 };
 
 #endif // LISTSCREATE_H

@@ -5,8 +5,6 @@ QT       -= gui
 CONFIG   -= app_bundle
 SOURCES = tst_qml.cpp
 
-DEFINES += QUICK_TEST_SOURCE_DIR=$$PWD
-
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += twitterapi-private
 } else {

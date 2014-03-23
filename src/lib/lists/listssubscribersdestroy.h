@@ -50,7 +50,7 @@ signals:
     void slugChanged(const QString &slug);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/lists/subscribers/destroy.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/lists/subscribers/destroy.json")); }
 };
 
 #endif // LISTSSUBSCRIBERSDESTROY_H

@@ -50,8 +50,8 @@ signals:
     void include_entitiesChanged(bool include_entities);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/statuses/show.json"); }
-    QString httpMethod() const { return "GET"; }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/statuses/show.json")); }
+    QString httpMethod() const { return QStringLiteral("GET"); }
 
     ADD_PROPERTY(bool, include_my_retweet, bool)
 };

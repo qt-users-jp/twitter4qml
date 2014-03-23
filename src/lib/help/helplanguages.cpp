@@ -44,7 +44,7 @@ void HelpLanguages::parseDone(const QVariant &result)
         foreach (const QVariant &result, array) {
             if (result.type() == QVariant::Map) {
                 QVariantMap map = result.toMap();
-                map.insert("id_str", map.value("name").toString());
+                map.insert(QStringLiteral("id_str"), map.value(QStringLiteral("name")).toString());
                 addData(map);
             }
         }

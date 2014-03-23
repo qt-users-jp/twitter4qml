@@ -41,7 +41,7 @@ signals:
     void followChanged(bool follow);
 
 protected:
-    QUrl api() const { return QUrl("https://api.twitter.com/1.1/friendships/create.json"); }
+    QUrl api() const { return QUrl(QStringLiteral("https://api.twitter.com/1.1/friendships/create.json")); }
 };
 
 #endif // FRIENDSHIPSCREATE_H

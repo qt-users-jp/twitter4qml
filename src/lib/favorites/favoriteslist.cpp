@@ -34,7 +34,7 @@ FavoritesList::FavoritesList(QObject *parent)
 void FavoritesList::dataAdded(const QString &key, const QVariantMap &value)
 {
     Q_UNUSED(key)
-    if (value.value("favorited").toBool()) {
+    if (value.value(QStringLiteral("favorited")).toBool()) {
         addData(value);
     }
 }
@@ -42,7 +42,7 @@ void FavoritesList::dataAdded(const QString &key, const QVariantMap &value)
 void FavoritesList::dataChanged(const QString &key, const QVariantMap &value)
 {
     Q_UNUSED(key)
-    if (value.value("favorited").toBool()) {
+    if (value.value(QStringLiteral("favorited")).toBool()) {
         addData(value);
     } else {
         removeData(key);
