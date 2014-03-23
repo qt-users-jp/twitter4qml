@@ -52,7 +52,7 @@ TestCase {
             tryCompare(model, 'loading', true)
         }
         tryCompare(model, 'loading', false, 10000)
-        tryCompare(model.size, 0)
+        tryCompare(model, 'size', 0)
     }
 
     function init() {
@@ -65,11 +65,11 @@ TestCase {
         model.savedSearchesCreate({query: '#twitter4qml'})
         tryCompare(model, 'loading', true)
         tryCompare(model, 'loading', false, 10000)
-        tryCompare(model.size, 1)
+        tryCompare(model, 'size', 1)
 
         model.savedSearchesDestroy({id: model.get(0).id} )
         tryCompare(model, 'loading', true)
         tryCompare(model, 'loading', false, 10000)
-        tryCompare(model.size, 0)
+        tryCompare(model, 'size', 0)
     }
 }
