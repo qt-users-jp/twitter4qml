@@ -2,6 +2,8 @@ TARGET = QtTwitterAPI
 MODULE = twitterapi
 QT = core gui network
 
+CMAKE_MODULE_TESTS = "-"
+
 greaterThan(QT_MAJOR_VERSION, 4) {
     load(qt_module)
 } else {
