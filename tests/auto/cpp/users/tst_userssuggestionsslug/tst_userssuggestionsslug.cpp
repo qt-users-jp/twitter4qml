@@ -63,7 +63,6 @@ void UsersSuggestionsSlugTest::load_data()
     QTest::addColumn<QString>("lang");
 
     QTest::newRow("Twitter") << "Twitter" << "en";
-    QTest::newRow("Twitter") << "Twitter" << "es";
     QTest::newRow("Twitter") << "Twitter" << "ja";
 }
 
