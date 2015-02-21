@@ -34,6 +34,7 @@
 #include "datamanager.h"
 #include "../favorites/favoritescreate.h"
 #include "../favorites/favoritesdestroy.h"
+#include "../media/mediaupload.h"
 #include "user.h"
 
 #include "../utils.h"
@@ -48,6 +49,7 @@ public:
 
     void update(const QVariantMap &parameters);
     void retweet(const QVariantMap &parameters);
+    void upload(const QVariantMap &parameters);
     void destroy();
     void favorite();
     void unfavorite();
@@ -160,6 +162,19 @@ void Status::Private::retweet(const QVariantMap &parameters)
     }
 }
 
+void Status::Private::upload(const QVariantMap &parameters)
+{
+    MediaUpload *action = new MediaUpload(this);
+    action->media(parameters.value(QStringLiteral("media")).toString());
+    connect(action, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
+    if (q->loading()) {
+        tasks.append(action);
+    } else {
+       q->loading(true);
+       action->exec();
+    }
+}
+
 void Status::Private::destroy()
 {
     StatusesDestroy *action = new StatusesDestroy(this);
@@ -260,6 +275,11 @@ void Status::statusesUpdate(QVariantMap parameters)
 void Status::statusesRetweet(QVariantMap parameters)
 {
     d->retweet(parameters);
+}
+
+void Status::mediaUpload(QVariantMap parameters)
+{
+    d->upload(parameters);
 }
 
 void Status::statusesDestroy()

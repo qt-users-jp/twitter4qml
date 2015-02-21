@@ -18,6 +18,7 @@ include(./trends/trends.pri)
 include(./oauth/oauth.pri)
 include(./help/help.pri)
 include(./application/application.pri)
+include(./media/media.pri)
 
 include(./tools/tools.pri)
 

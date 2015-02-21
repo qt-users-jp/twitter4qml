@@ -124,7 +124,8 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
     requestParams[QStringLiteral("oauth_nonce")] = nonce.toUtf8();
     requestParams[QStringLiteral("oauth_timestamp")] = timestamp.toUtf8();
 //    DEBUG() << url.host();
-    if (url.path().endsWith(QStringLiteral("update_with_media.json"), Qt::CaseInsensitive)) {
+    if ((url.path().endsWith(QStringLiteral("update_with_media.json"), Qt::CaseInsensitive))
+        || (url.path().endsWith(QStringLiteral("upload.json"), Qt::CaseInsensitive))) {
         requestParams[QStringLiteral("oauth_signature")] =  signature(method,
                                                       url,
                                                       normalize(signatureParams(QMultiMap<QString, QByteArray>())));
@@ -146,7 +147,7 @@ QNetworkReply *OAuthManager::Private::request(const QString &method, const QUrl 
                     QList<QByteArray> vals = params.values(key);
                     foreach(const QByteArray &val, vals) {
                         body.append(QStringLiteral("--%1\r\n").arg(boundary).toUtf8());
-                        if (key == QStringLiteral("media[]")) {
+                        if (key == QStringLiteral("media[]") || key == QStringLiteral("media")) {
                             QUrl url;
                             if (val.startsWith(":")) {
                                 url = QUrl(QStringLiteral("qrc%1").arg(QString::fromUtf8(val)));

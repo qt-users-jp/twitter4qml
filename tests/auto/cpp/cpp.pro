@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = search statuses accounts users help trends friendships
+SUBDIRS = search statuses accounts users help trends friendships media

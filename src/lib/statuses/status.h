@@ -81,7 +81,11 @@ class TWITTER4QML_EXPORT Status : public QObject
     Q_PROPERTY(QVariantMap withheld_in_countries READ withheld_in_countries WRITE withheld_in_countries NOTIFY withheld_in_countriesChanged)
     Q_PROPERTY(QString withheld_scope READ withheld_scope WRITE withheld_scope NOTIFY withheld_scopeChanged)
     Q_PROPERTY(QVariantList media READ media WRITE media NOTIFY mediaChanged)
+    Q_PROPERTY(QVariantMap image READ image WRITE image NOTIFY imageChanged)
+    Q_PROPERTY(long media_id READ media_id WRITE media_id NOTIFY media_idChanged)
+    Q_PROPERTY(QString media_id_string READ media_id_string WRITE media_id_string NOTIFY media_id_stringChanged)
     Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged DESIGNABLE false)
+
     Q_DISABLE_COPY(Status)
 public:
     explicit Status(QObject *parent = 0);
@@ -93,6 +97,7 @@ public:
 
     Q_INVOKABLE void statusesUpdate(QVariantMap parameters);
     Q_INVOKABLE void statusesRetweet(QVariantMap parameters);
+    Q_INVOKABLE void mediaUpload(QVariantMap parameters);
     Q_INVOKABLE void statusesDestroy();
     Q_INVOKABLE void favorite();
     Q_INVOKABLE void unfavorite();
@@ -136,6 +141,9 @@ signals:
     void withheld_in_countriesChanged(const QVariantMap &withheld_in_countries);
     void withheld_scopeChanged(const QString &withheld_scope);
     void mediaChanged(const QVariantList &media) const;
+    void imageChanged(const QVariantMap &image);
+    void media_idChanged(long media_id);
+    void media_id_stringChanged(const QString &media_id_string) const;
     void dataChanged();
 
 private:
@@ -176,6 +184,9 @@ private:
     ADD_PROPERTY(const QVariantMap &, withheld_in_countries, QVariantMap)
     ADD_PROPERTY(const QString &, withheld_scope, QString)
     ADD_PROPERTY(const QVariantList &, media, QVariantList)
+    ADD_PROPERTY(const QVariantMap &, image, QVariantMap)
+    ADD_PROPERTY(long, media_id, long)
+    ADD_PROPERTY(const QString &, media_id_string, QString)
 };
 
 #endif // STATUS_H
