@@ -121,6 +121,12 @@ void AbstractTwitterAction::Private::exec()
                 }
             }
             break;
+        case QVariant::StringList:
+            if (!value.toStringList().isEmpty()) {
+                params.insert(QString::fromUtf8(key), value.toStringList().join(",").toUtf8());
+                body.append(QStringLiteral("%1=%2").arg(QString::fromUtf8(key)).arg(value.toStringList().join(",")));
+            }
+            break;
         default:
             DEBUG() << key << "not found" << value;
             break;

@@ -28,6 +28,7 @@
 
 #include <statusesupdate.h>
 #include <accountverifycredentials.h>
+#include <mediaupload.h>
 
 class StatusesUpdateTest : public AbstractTwitter4QMLTest
 {
@@ -40,6 +41,8 @@ private Q_SLOTS:
     void in_reply_to_status_id();
     void geo();
     void geo_data();
+    void mediaUpload();
+    void mediaUpload_data();
 
 private:
     AccountVerifyCredentials accountVerifyCredentials;
@@ -120,6 +123,38 @@ void StatusesUpdateTest::geo_data()
     QTest::newRow("Example") << QString("Example") << 37.7821120598956 << -122.400612831116;
     QTest::newRow("Mt. Fuji") << QString("Mt. Fuji") << 35.362892 << 138.730467;
     QTest::newRow("Great Pyramid of Giza") << QString("Great Pyramid of Giza") << 29.979025 << 31.134194;
+}
+
+void StatusesUpdateTest::mediaUpload()
+{
+    QFETCH(QString, media);
+    StatusesUpdate statusesUpdate;
+    MediaUpload mediaUpload;
+
+    QStringList media_ids;
+    mediaUpload.media(media);
+
+    for (int i=0; i<4; i++) {
+        exec(&mediaUpload);
+        QVariantMap response = mediaUpload.data().toMap();
+        media_ids.append(response.value("media_id_string").toString());
+    }
+
+    statusesUpdate.status(QString("%1 %2").arg(media).arg(QDateTime::currentDateTime().toString()));
+
+    statusesUpdate.media_ids(media_ids);
+    QCOMPARE(statusesUpdate.media_ids(), media_ids);
+    QVERIFY2(exec(&statusesUpdate), "StatusesUpdate::exec()");
+
+    QVariantMap response = statusesUpdate.data().toMap();
+
+    QCOMPARE(response.value("id").isValid(), true);
+}
+
+void StatusesUpdateTest::mediaUpload_data()
+{
+    QTest::addColumn<QString>("media");
+    QTest::newRow("Test") << ":/QtLogo.png";
 }
 
 QTEST_MAIN(StatusesUpdateTest)

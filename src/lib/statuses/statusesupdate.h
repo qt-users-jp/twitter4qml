@@ -40,6 +40,7 @@ class TWITTER4QML_EXPORT StatusesUpdate : public AbstractStatusAction
     Q_PROPERTY(QString display_coordinates READ display_coordinates WRITE display_coordinates NOTIFY display_coordinatesChanged)
     Q_PROPERTY(bool trim_user READ trim_user WRITE trim_user NOTIFY trim_userChanged)
 //    Q_PROPERTY(bool include_entities READ include_entities WRITE include_entities NOTIFY include_entitiesChanged)
+    Q_PROPERTY(QStringList media_ids READ media_ids WRITE media_ids NOTIFY media_idsChanged)
 
     Q_DISABLE_COPY(StatusesUpdate)
 public:
@@ -54,6 +55,7 @@ signals:
     void display_coordinatesChanged(const QString &display_coordinates);
     void trim_userChanged(bool trim_user);
 //    void include_entitiesChanged(bool include_entities);
+    void media_idsChanged(const QStringList &media_ids);
 
 protected:
     virtual AuthorizeBy authenticationMethod() const { return AuthorizeByHeader; }
@@ -65,6 +67,7 @@ protected:
     ADD_PROPERTY(double, longitude, double)
     ADD_PROPERTY(const QString &, place_id, QString)
     ADD_PROPERTY(const QString &, display_coordinates, QString)
+    ADD_PROPERTY(const QStringList &, media_ids, QStringList)
 };
 
 #endif // STATUSESUPDATE_H

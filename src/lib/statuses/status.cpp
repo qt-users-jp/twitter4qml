@@ -136,6 +136,7 @@ void Status::Private::update(const QVariantMap &parameters)
         act->in_reply_to_status_id(parameters.value(QStringLiteral("in_reply_to_status_id")).toString());
         act->trim_user(false);
         act->include_entities(true);
+        act->media_ids(parameters.value(QStringLiteral("media_ids")).toStringList());
         connect(act, SIGNAL(dataChanged(QVariant)), this, SLOT(dataChanged(QVariant)));
         action = act;
     }
