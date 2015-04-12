@@ -43,5 +43,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 OTHER_FILES += statuses/tst_statuseshometimeline.qml \
     statuses/tst_statusessample.qml \
+    statuses/tst_statusesretweetersids.qml \
     savedsearches/tst_savedsearches.qml \
     search/tst_search_tweets.qml

@@ -41,6 +41,10 @@ Module {
         Property { name: "previous_cursor"; type: "int"; isReadonly: true }
         Property { name: "previous_cursor_str"; type: "string"; isReadonly: true }
         Signal {
+            name: "idChanged"
+            Parameter { name: "id"; type: "string" }
+        }
+        Signal {
             name: "user_idChanged"
             Parameter { name: "user_id"; type: "string" }
         }
@@ -1768,6 +1772,9 @@ Module {
         Property { name: "withheld_in_countries"; type: "QVariantMap" }
         Property { name: "withheld_scope"; type: "string" }
         Property { name: "media"; type: "QVariantList" }
+        Property { name: "image"; type: "QVariantMap" }
+        Property { name: "media_id"; type: "long" }
+        Property { name: "media_id_string"; type: "string" }
         Property { name: "data"; type: "QVariantMap"; isReadonly: true }
         Signal {
             name: "loadingChanged"
@@ -1905,12 +1912,28 @@ Module {
             name: "mediaChanged"
             Parameter { name: "media"; type: "QVariantList" }
         }
+        Signal {
+            name: "imageChanged"
+            Parameter { name: "image"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "media_idChanged"
+            Parameter { name: "media_id"; type: "long" }
+        }
+        Signal {
+            name: "media_id_stringChanged"
+            Parameter { name: "media_id_string"; type: "string" }
+        }
         Method {
             name: "statusesUpdate"
             Parameter { name: "parameters"; type: "QVariantMap" }
         }
         Method {
             name: "statusesRetweet"
+            Parameter { name: "parameters"; type: "QVariantMap" }
+        }
+        Method {
+            name: "mediaUpload"
             Parameter { name: "parameters"; type: "QVariantMap" }
         }
         Method { name: "statusesDestroy" }
@@ -2022,6 +2045,28 @@ Module {
         Signal {
             name: "include_entitiesChanged"
             Parameter { name: "include_entities"; type: "bool" }
+        }
+    }
+    Component {
+        name: "StatusesRetweetersIds"
+        defaultProperty: "childObjects"
+        prototype: "AbstractFriendshipsIdsModel"
+        exports: ["StatusesRetweetersIdsModel 1.1"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "_id"; type: "string" }
+        Property { name: "cursor"; type: "string" }
+        Property { name: "stringify_ids"; type: "bool" }
+        Signal {
+            name: "idChanged"
+            Parameter { name: "id"; type: "string" }
+        }
+        Signal {
+            name: "cursorChanged"
+            Parameter { name: "cursor"; type: "string" }
+        }
+        Signal {
+            name: "stringify_idsChanged"
+            Parameter { name: "stringify_ids"; type: "bool" }
         }
     }
     Component {

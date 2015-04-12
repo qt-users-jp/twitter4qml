@@ -42,13 +42,22 @@ SOURCES += \
     $$PWD/userstream.cpp \
     $$PWD/statusessample.cpp
 
+# Others
+PUBLIC_HEADERS += \
+    $$PWD/statusesretweetersids.h
+
+SOURCES += \
+    $$PWD/statusesretweetersids.cpp
+
 # Abstract classes
 PUBLIC_HEADERS += \
     $$PWD/abstractstatusesmodel.h \
     $$PWD/abstractidsmodel.h \
-    $$PWD/abstractstatusaction.h
+    $$PWD/abstractstatusaction.h \
+    $$PWD/abstractstatusesidsmodel.h
 
 SOURCES += \
     $$PWD/abstractstatusesmodel.cpp \
     $$PWD/abstractidsmodel.cpp \
-    $$PWD/abstractstatusaction.cpp
+    $$PWD/abstractstatusaction.cpp \
+    $$PWD/abstractstatusesidsmodel.cpp

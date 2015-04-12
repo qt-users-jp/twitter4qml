@@ -51,6 +51,9 @@
 #include <statusesfilter.h>
 #include <statusessample.h>
 
+//Others
+#include <statusesretweetersids.h>
+
 // Direct Messages
 #include <directmessages.h>
 #include <directmessagessent.h>
@@ -152,6 +155,9 @@ public:
         qmlRegisterType<UserStream>(uri, major, minor, "UserStreamModel");
         qmlRegisterType<StatusesFilter>(uri, major, minor, "StatusesFilterModel");
         qmlRegisterType<StatusesSample>(uri, major, minor, "StatusesSampleModel");
+
+        //Others
+        qmlRegisterType<StatusesRetweetersIds>(uri, major, minor, "StatusesRetweetersIdsModel");
 
         // Direct Messages
         qmlRegisterType<DirectMessages>(uri, major, minor, "DirectMessagesModel");
