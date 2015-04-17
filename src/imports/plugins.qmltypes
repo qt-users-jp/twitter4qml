@@ -41,10 +41,6 @@ Module {
         Property { name: "previous_cursor"; type: "int"; isReadonly: true }
         Property { name: "previous_cursor_str"; type: "string"; isReadonly: true }
         Signal {
-            name: "idChanged"
-            Parameter { name: "id"; type: "string" }
-        }
-        Signal {
             name: "user_idChanged"
             Parameter { name: "user_id"; type: "string" }
         }
@@ -139,6 +135,44 @@ Module {
             name: "previous_cursor_strChanged"
             Parameter { name: "previous_cursor_str"; type: "string" }
         }
+    }
+    Component {
+        name: "AbstractStatusesIdsModel"
+        defaultProperty: "childObjects"
+        prototype: "AbstractTwitterModel"
+        Property { name: "next_cursor"; type: "int"; isReadonly: true }
+        Property { name: "next_cursor_str"; type: "string"; isReadonly: true }
+        Property { name: "previous_cursor"; type: "int"; isReadonly: true }
+        Property { name: "previous_cursor_str"; type: "string"; isReadonly: true }
+        Signal {
+            name: "idChanged"
+            Parameter { name: "id"; type: "string" }
+        }
+        Signal {
+            name: "cursorChanged"
+            Parameter { name: "cursor"; type: "string" }
+        }
+        Signal {
+            name: "stringify_idsChanged"
+            Parameter { name: "stringify_ids"; type: "bool" }
+        }
+        Signal {
+            name: "next_cursorChanged"
+            Parameter { name: "next_cursor"; type: "int" }
+        }
+        Signal {
+            name: "next_cursor_strChanged"
+            Parameter { name: "next_cursor_str"; type: "string" }
+        }
+        Signal {
+            name: "previous_cursorChanged"
+            Parameter { name: "previous_cursor"; type: "int" }
+        }
+        Signal {
+            name: "previous_cursor_strChanged"
+            Parameter { name: "previous_cursor_str"; type: "string" }
+        }
+        Method { name: "reload" }
     }
     Component {
         name: "AbstractStatusesModel"
@@ -1772,6 +1806,7 @@ Module {
         Property { name: "withheld_in_countries"; type: "QVariantMap" }
         Property { name: "withheld_scope"; type: "string" }
         Property { name: "media"; type: "QVariantList" }
+        Property { name: "extended_media"; type: "QVariantList" }
         Property { name: "image"; type: "QVariantMap" }
         Property { name: "media_id"; type: "long" }
         Property { name: "media_id_string"; type: "string" }
@@ -1913,6 +1948,10 @@ Module {
             Parameter { name: "media"; type: "QVariantList" }
         }
         Signal {
+            name: "extended_mediaChanged"
+            Parameter { name: "extended_media"; type: "QVariantList" }
+        }
+        Signal {
             name: "imageChanged"
             Parameter { name: "image"; type: "QVariantMap" }
         }
@@ -2050,7 +2089,7 @@ Module {
     Component {
         name: "StatusesRetweetersIds"
         defaultProperty: "childObjects"
-        prototype: "AbstractFriendshipsIdsModel"
+        prototype: "AbstractStatusesIdsModel"
         exports: ["StatusesRetweetersIdsModel 1.1"]
         exportMetaObjectRevisions: [0]
         Property { name: "_id"; type: "string" }
@@ -2475,6 +2514,52 @@ Module {
             Parameter { name: "include_entities"; type: "bool" }
         }
         Method { name: "reload" }
+    }
+    Component {
+        name: "UsersProfileBanner"
+        prototype: "AbstractTwitterAction"
+        exports: ["UsersProfileBanner 1.1"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "user_id"; type: "string" }
+        Property { name: "screen_name"; type: "string" }
+        Property { name: "ipad"; type: "QVariantMap" }
+        Property { name: "ipad_retina"; type: "QVariantMap" }
+        Property { name: "web"; type: "QVariantMap" }
+        Property { name: "web_retina"; type: "QVariantMap" }
+        Property { name: "mobile"; type: "QVariantMap" }
+        Property { name: "mobile_retina"; type: "QVariantMap" }
+        Signal {
+            name: "user_idChanged"
+            Parameter { name: "user_id"; type: "string" }
+        }
+        Signal {
+            name: "screen_nameChanged"
+            Parameter { name: "screen_name"; type: "string" }
+        }
+        Signal {
+            name: "ipadChanged"
+            Parameter { name: "ipad"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "ipad_retinaChanged"
+            Parameter { name: "ipad_retina"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "webChanged"
+            Parameter { name: "web"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "web_retinaChanged"
+            Parameter { name: "web_retina"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "mobileChanged"
+            Parameter { name: "mobile"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "mobile_retinaChanged"
+            Parameter { name: "mobile_retina"; type: "QVariantMap" }
+        }
     }
     Component {
         name: "UsersSearch"

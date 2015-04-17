@@ -78,6 +78,7 @@
 #include <userslookup.h>
 #include <user.h>
 #include <userssearch.h>
+#include <usersprofilebanner.h>
 
 // Suggested Users
 #include <userssuggestions.h>
@@ -181,6 +182,7 @@ public:
         qmlRegisterType<UsersSuggestions>(uri, major, minor, "UsersSuggestionsModel");
         qmlRegisterType<UsersSuggestionsSlug>(uri, major, minor, "UsersSuggestionsSlugModel");
         qmlRegisterType<UsersSearch>(uri, major, minor, "UsersSearchModel");
+        qmlRegisterType<UsersProfileBanner>(uri, major, minor, "UsersProfileBanner");
 
         qmlRegisterType<FavoritesList>(uri, major, minor, "FavoritesModel");
 

@@ -5,12 +5,14 @@ DEPENDPATH += $$PWD
 PUBLIC_HEADERS += \
     $$PWD/userslookup.h \
     $$PWD/usersshow.h \
-    $$PWD/userssearch.h
+    $$PWD/userssearch.h \
+    $$PWD/usersprofilebanner.h
 
 SOURCES += \
     $$PWD/userslookup.cpp \
     $$PWD/usersshow.cpp \
-    $$PWD/userssearch.cpp
+    $$PWD/userssearch.cpp \
+    $$PWD/usersprofilebanner.cpp
 
 # Suggested Users
 PUBLIC_HEADERS += \
