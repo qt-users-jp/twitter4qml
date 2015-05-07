@@ -97,6 +97,7 @@ void Status::Private::id_strChanged(const QString &id)
     q->truncated(false);
     q->user(QVariantMap());
     q->media(QVariantList());
+    q->extended_media(QVariantList());
 
     if (id.isEmpty()) {
     } else {
@@ -410,6 +411,33 @@ QVariantMap Status::parse(const QVariantMap &status)
                 rich_text.replace(start, end - start, rich_textAfter);
         }
 
+        QVariantList extended_entitiesSortedByIndices;
+        QVariantMap extended_entities = ret.value(QStringLiteral("extended_entities")).toMap();
+        foreach (const QString &key, extended_entities.keys()) {
+            QVariant extended_entity = extended_entities.value(key);
+            if (extended_entity.type() == QVariant::List) {
+                QVariantList e = extended_entity.toList();
+                foreach (const QVariant &ee, e) {
+                    QVariantMap eee = ee.toMap();
+                    eee.insert(QStringLiteral("type"), key);
+                    extended_entitiesSortedByIndices.append(eee);
+                }
+            } else {
+                DEBUG() << extended_entity;
+            }
+        }
+        std::sort(extended_entitiesSortedByIndices.begin(), extended_entitiesSortedByIndices.end(), &Status::indicesGreaterThan);
+        QVariantList extended_media;
+        foreach (const QVariant &item, extended_entitiesSortedByIndices) {
+            QVariantMap extended_entity = item.toMap();
+            QString type = extended_entity.value(QStringLiteral("type")).toString();
+            if (type == QStringLiteral("media")) {
+                extended_media.append(extended_entity.value(QStringLiteral("media_url")));
+            } else {
+                DEBUG() << type << item;
+            }
+        }
+
 
 //        DEBUG() << ret.value("text").toString();
         ret.insert(QStringLiteral("plain_text"), escapeHtml(plain_text));
@@ -417,6 +445,7 @@ QVariantMap Status::parse(const QVariantMap &status)
         ret.insert(QStringLiteral("rich_text"), rich_text.replace(QStringLiteral("\n"), QStringLiteral("<br />")).replace(QStringLiteral("\t"), QStringLiteral("&nbsp;")).replace(QString::fromUtf8("　"), QStringLiteral("&nbsp;&nbsp;&nbsp;&nbsp;")));
 //        DEBUG() << ret.value("rich_text").toString();
         ret.insert(QStringLiteral("media"), media);
+        ret.insert(QStringLiteral("extended_media"), extended_media);
     } else {
         DEBUG() << text;
         if (!ret.contains(QStringLiteral("plain_text")))
